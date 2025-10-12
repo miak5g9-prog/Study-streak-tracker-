@@ -11,3 +11,108 @@
   <script src="script.js"></script>
 </body>
 </html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Study Streak Tracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 400px;
+      margin: 50px auto;
+      padding: 30px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background: #f9f9f9;
+      text-align: center;
+    }
+    h1 {
+      margin-bottom: 30px;
+    }
+    .counter {
+      font-size: 2em;
+      margin: 20px 0;
+      color: #2196f3;
+    }
+    button {
+      margin: 10px 5px;
+      padding: 10px 20px;
+      font-size: 1em;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      background: #2196f3;
+      color: white;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #1565c0;
+    }
+    .reset-btn {
+      background: #e53935;
+    }
+    .reset-btn:hover {
+      background: #b71c1c;
+    }
+    .last-studied {
+      font-size: 0.9em;
+      color: #555;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Study Streak Tracker</h1>
+  <div class="counter" id="streakCount">0</div>
+  <div class="last-studied" id="lastStudied"></div>
+  <button id="logTodayBtn">Log Today's Study</button>
+  <button class="reset-btn" id="resetBtn">Reset</button>
+
+  <script>
+    // Helper functions for localStorage
+    function getStreak() {
+      return parseInt(localStorage.getItem('studyStreak') || '0');
+    }
+    function setStreak(count) {
+      localStorage.setItem('studyStreak', count);
+    }
+    function getLastDate() {
+      return localStorage.getItem('lastStudiedDate') || '';
+    }
+    function setLastDate(dateStr) {
+      localStorage.setItem('lastStudiedDate', dateStr);
+    }
+
+    function updateUI() {
+      const streak = getStreak();
+      document.getElementById('streakCount').textContent = streak;
+      const lastDate = getLastDate();
+      document.getElementById('lastStudied').textContent = lastDate ? `Last studied: ${lastDate}` : '';
+    }
+
+    document.getElementById('logTodayBtn').onclick = function() {
+      const today = new Date().toISOString().slice(0, 10);
+      const lastDate = getLastDate();
+      if (lastDate === today) {
+        alert("You've already logged today's study!");
+        return;
+      }
+      setLastDate(today);
+      setStreak(getStreak() + 1);
+      updateUI();
+    };
+
+    document.getElementById('resetBtn').onclick = function() {
+      if (confirm("Reset your study streak?")) {
+        setStreak(0);
+        setLastDate('');
+        updateUI();
+      }
+    };
+
+    updateUI();
+  </script>
+</body>
+</html>
